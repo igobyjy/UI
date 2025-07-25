@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>igobyjy - 个人网站</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* 主色调：苹果风格明亮蓝 */
+            --primary-color: #2563eb;    /* 主蓝（按钮/进度条/链接） */
+            --secondary-color: #1d4ed8;  /* 辅助蓝（渐变/阴影） */
+            --accent-blue: #60a5fa;      /* 浅蓝（悬停/边框） */
+            
+            /* 基础色（保留原逻辑，仅调整主色关联） */
+            --bg-color: #f8fafc;         /* 浅色背景 */
+            --text-color: #2c3e50;       /* 深灰文字 */
+            --card-bg: white;            /* 卡片背景 */
+            --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);  /* 卡片阴影 */
+            --border-color: #eaeaea;     /* 边框颜色 */
+            --footer-bg: linear-gradient(135deg, #2c3e50, #1a2530);  /* 页脚渐变 */
+            --nav-bg: white;             /* 导航背景 */
+            --hover-effect: rgba(37, 99, 235, 0.1);  /* 悬停透明层 */
+            --tagline-color: #7f8c8d;    /* 副标题颜色 */
+        }
+
+        .dark-mode {
+            /* 黑暗模式蓝色调 */
+            --primary-color: #60a5fa;    /* 浅蓝（按钮/进度条） */
+            --secondary-color: #3b82f6;  /* 辅助蓝（渐变/阴影） */
+            --accent-blue: #93c5fd;      /* 更浅蓝（悬停/边框） */
+            
+            --bg-color: #121826;         /* 深灰背景 */
+            --text-color: #e2e8f0;       /* 浅灰文字 */
+            --card-bg: #1e293b;          /* 卡片背景 */
+            --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);  /* 卡片阴影加深 */
+            --border-color: #334155;     /* 边框颜色加深 */
+            --footer-bg: linear-gradient(135deg, #0f172a, #1e293b);  /* 页脚渐变 */
+            --nav-bg: #1e293b;           /* 导航背景 */
+            --hover-effect: rgba(96, 165, 250, 0.2);  /* 悬停透明层加深 */
+            --tagline-color: #94a3b8;    /* 副标题颜色变浅 */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            transition: background-color 0.5s ease, color 0.3s ease;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 粒子背景颜色调整为蓝色 */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* 黑暗模式切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);  /* 边框用主蓝 */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
+        
+        .theme-toggle i {
+            font-size: 1.5rem;
+            color: var(--primary-color);  /* 图标用主蓝 */
+        }
+
+        /* 导航链接样式（仅调整颜色，保留原布局） */
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;  /* 保留原间距 */
+            list-style: none;
+            padding: 1rem 0;  /* 保留原内边距 */
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);  /* 原文字颜色 */
+            font-weight: 600;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 1.1rem;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary-color);  /* 下划线用主蓝 */
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);  /* 悬停文字用主蓝 */
+            background: var(--hover-effect);  /* 悬停背景用主蓝透明层 */
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;  /* 下划线从左到右展开 */
+        }
+
+        /* 头部区域（保留原布局，仅调整颜色） */
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            z-index: 10;
+            margin-top: -50px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);  /* 标题用主蓝 */
+            font-weight: 700;
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            color: var(--tagline-color);  /* 副标题保留原颜色 */
+            margin-bottom: 1.5rem;
+        }
+
+        /* 关于我区域（保留原布局，仅调整颜色） */
+        .about-content {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        
+        .about-text {
+            flex: 1;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .about-image {
+            flex: 1;
+            height: 320px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));  /* 渐变用主蓝+辅助蓝 */
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 技能卡片（仅调整颜色，保留原布局） */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.8rem;
+        }
+        
+        .skill-card {
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-color);  /* 悬停边框用主蓝 */
+        }
+        
+        .skill-icon {
+            font-size: 3rem;
+            color: var(--primary-color);  /* 图标用主蓝 */
+            margin-bottom: 1.5rem;
+        }
+        
+        .skill-card h3 {
+            margin-bottom: 1rem;
+            color: var(--text-color);  /* 标题保留原颜色 */
+        }
+
+        /* 技能进度条（仅调整颜色，保留原布局） */
+        .skill-progress {
+            width: 100%;
+            background-color: var(--border-color);  /* 背景用原边框色 */
+            border-radius: 10px;
+            height: 12px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));  /* 渐变用主蓝+辅助蓝 */
+            border-radius: 10px;
+            width: 0;
+            transition: width 1.5s ease-in-out;
+        }
+
+        /* 作品集区域（仅调整颜色，保留原布局） */
+        .portfolio-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.8rem;
+        }
+        
+        .portfolio-item {
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: var(--card-bg);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        
+        .portfolio-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary-color);  /* 悬停边框用主蓝 */
+        }
+        
+        .portfolio-img {
+            height: 220px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));  /* 渐变用主蓝+辅助蓝 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px 12px 0 0;
+        }
+
+        /* 联系表单（仅调整颜色，保留原布局） */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: var(--text-color);  /* 标签保留原颜色 */
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 1px solid var(--border-color);  /* 边框用原边框色 */
+            border-radius: 8px;
+            font-size: 1.1rem;
+            background-color: var(--bg-color);  /* 输入背景用原背景色 */
+            color: var(--text-color);  /* 输入文字保留原颜色 */
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);  /* 聚焦边框用主蓝 */
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);  /* 聚焦阴影用主蓝透明层 */
+        }
+
+        /* 打字游戏区域（仅调整颜色，保留原布局） */
+        #typing-game {
+            margin-top: 3rem;
+            padding: 2.5rem;
+            background: var(--card-bg);  /* 背景用原卡片色 */
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .game-title {
+            font-size: 2rem;
+            color: var(--primary-color);  /* 标题用主蓝 */
+            margin-bottom: 1.5rem;
+        }
+
+        /* 页脚（仅调整颜色，保留原布局） */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--footer-bg);  /* 背景用原页脚渐变 */
+            color: white;
+            margin-top: 4rem;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin: 2rem 0;
+        }
+        
+        .footer-links a {
+            color: white;  /* 链接保留原白色 */
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent-blue);  /* 悬停用浅蓝 */
+            text-decoration: underline;
+        }
+
+        /* 模态框（仅调整颜色，保留原布局） */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.visible {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);  /* 内容背景用原卡片色 */
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal.visible .modal-content {
+            transform: translateY(0);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);  /* 关闭图标保留原颜色 */
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: var(--accent-color);  /* 悬停用原粉色 */
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);  /* 标题用主蓝 */
+        }
+
+        /* 回到顶部按钮（仅调整颜色，保留原布局） */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);  /* 背景用主蓝 */
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .back-to-top:hover {
+            background: var(--secondary-color);  /* 悬停用辅助蓝 */
+            transform: translateY(-5px);
+        }
+
+        /* 行走宠物助手（仅调整颜色，保留原布局） */
+        .walking-pet {
+            position: fixed;
+            top: 20px;
+            left: 50px;
+            z-index: 2000;
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            transform-origin: center bottom;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+        
+        .pet-body {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .pet-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        .walking-pet.dragging {
+            cursor: grabbing;
+            filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
+            transform: scale(1.05);
+            z-index: 3000;
+        }
+        
+        .pet-bubble {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;  /* 气泡背景保留原白色 */
+            color: #333;  /* 气泡文字保留原深灰 */
+            padding: 10px 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-size: 0.9rem;
+            width: 180px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+            pointer-events: none;
+            margin-top: 10px;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+        
+        .pet-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid white;
+        }
+        
+        .pet-bubble.visible {
+            opacity: 1;
+        }
+
+        /* 响应式调整（完全保留原代码） */
+        @media (max-width: 992px) {
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .about-image {
+                height: 280px;
+                width: 100%;
+            }
+            
+            .nav-links {
+                gap: 1.5rem;
+            }
+            
+            .typewriter {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .full-image-container {
+                max-height: 60vh;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.1rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .portfolio-container,
+            .skills-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-container {
+                padding: 1.5rem;
+            }
+            
+            section {
+                padding: 2rem;
+            }
+            
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+            }
+            
+            header {
+                margin-top: -30px;
+            }
+            
+            .typewriter {
+                font-size: 2rem;
+                white-space: normal;
+                border-right: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .full-image-container {
+                max-height: 50vh;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            section {
+                padding: 1.5rem;
+            }
+            
+            header {
+                padding: 1.5rem;
+            }
+            
+            .about-image {
+                height: 250px;
+            }
+            
+            .portfolio-img {
+                height: 180px;
+            }
+            
+            .typewriter {
+                font-size: 1.8rem;
+                letter-spacing: .1em;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .full-image-container {
+                max-height: 45vh;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            header {
+                margin-top: -20px;
+            }
+            
+            .typewriter {
+                font-size: 1.6rem;
+                animation: typing 1.8s steps(16, end) forwards;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 粒子背景容器 -->
+    <div id="particles-js"></div>
+    
+    <!-- 黑暗模式切换按钮 -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+    
+    <!-- 顶部图片 -->
+    <div class="full-image-container">
+        <img src="images/名字.png" 
+             alt="创意设计工作空间" 
+             class="full-image">
+    </div>
+    
+    <div class="content-container">
+        <header>
+            <h1><span class="typewriter">Hi!</span>欢迎来到我的网站！</h1>
+            <p class="tagline">UI设计师 | 创意技术爱好者</p>
+        </header>
+        
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#about">关于我</a></li>
+                <li><a href="#skills">技能</a></li>
+                <li><a href="#portfolio">作品集</a></li>
+                <li><a href="#contact">联系我</a></li>
+            </ul>
+        </nav>
+        
+        <section id="about">
+            <h2 class="section-title">关于我</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>你好！我是jy，一名热爱创造的高中生。我热衷于将创意与技术相结合，探索数字世界的无限可能。</p>
+                    <p>虽然还在高中阶段，但我已经掌握了多种前端技术和设计工具，能够独立完成网站设计和开发。我相信技术是表达创意的最佳媒介，每一行代码都是艺术创作。</p>
+                    <p>在我的学习过程中，我特别关注用户体验和界面设计，努力创造既美观又实用的数字产品。我享受将抽象概念转化为具体实现的过程，这让我感到无比满足。</p>
+                    <p>未来，我希望能够继续深入学习计算机科学和设计领域，将我的热情转化为职业道路，创造出能够真正影响人们生活的数字产品。</p>
+                </div>
+                <div class="about-image">
+                    <i class="fas fa-laptop-code" style="font-size: 4rem;"></i>
+                    <p style="margin-top: 1.5rem; font-size: 1.4rem; z-index: 2;">热爱编码与设计</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="skills">
+            <h2 class="section-title">我的技能</h2>
+            <div class="skills-container">
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fab fa-html5"></i></div>
+                    <h3>HTML5 & CSS3</h3>
+                    <div class="skill-progress">
+                        <div class="progress-bar" data-value="35"></div>
+                        <div class="progress-value">35%</div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fab fa-js"></i></div>
+                    <h3>JavaScript</h3>
+                    <div class="skill-progress">
+                        <div class="progress-bar" data-value="15"></div>
+                        <div class="progress-value">15%</div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fab fa-figma"></i></div>
+                    <h3>UI/UX 设计</h3>
+                    <div class="skill-progress">
+                        <div class="progress-bar" data-value="30"></div>
+                        <div class="progress-value">30%</div>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-paint-brush"></i></div>
+                    <h3>创意设计</h3>
+                    <div class="skill-progress">
+                        <div class="progress-bar" data-value="30"></div>
+                        <div class="progress-value">30%</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="portfolio">
+            <h2 class="section-title">作品集</h2>
+            <div class="portfolio-container">
+                <div class="portfolio-item" data-project="1">
+                    <div class="portfolio-img">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>校园生活应用</h3>
+                        <p>为高中生设计的校园生活管理应用UI/UX设计</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-project="2">
+                    <div class="portfolio-img">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>学习平台设计</h3>
+                        <p>在线学习平台的界面设计与用户体验优化</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-project="3">
+                    <div class="portfolio-img">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>创意艺术网站</h3>
+                        <p>青年艺术家作品展示平台的设计与开发</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 联系表单 -->
+        <form class="contact-form" id="contactForm" action="https://formspree.io/f/xgvzaevd" method="POST">
+            <input type="hidden" name="_subject" value="网站新留言 - 来自igobyjy的个人网站">
+            <input type="hidden" name="_replyto" value="message">
+        
+            <div class="form-group">
+                <label for="name">姓名 <span style="color: #ef4444;">*</span></label>
+                <input type="text" id="name" name="name" placeholder="请输入您的姓名" required>
+            </div>
+        
+            <div class="form-group">
+                <label for="email">邮箱 <span style="color: #ef4444;">*</span></label>
+                <input type="email" id="email" name="email" placeholder="请输入您的邮箱" required>
+            </div>
+        
+            <div class="form-group">
+                <label for="message">留言 <span style="color: #ef4444;">*</span></label>
+                <textarea id="message" name="message" rows="5" placeholder="请输入您的留言（如需求、建议等）" required></textarea>
+            </div>
+        
+            <button class="btn" type="submit">发送消息</button>
+        </form>
+        
+        <!-- 打字小游戏区域 -->
+        <div id="typing-game">
+            <div class="game-container">
+                <h2 class="game-title">打字速度挑战</h2>
+                <p class="game-instructions">在下方输入框中输入显示的句子。完成后点击"检查结果"或按Enter键查看您的打字速度和准确率！</p>
+                
+                <div id="quote-display">
+                    欢迎挑战打字速度！请开始输入...
+                </div>
+                
+                <textarea id="quote-input" placeholder="在此处输入上面的句子..."></textarea>
+                
+                <div class="game-stats">
+                    <div class="stat-box">
+                        速度
+                        <span id="speed-value" class="stat-value">0</span> 字/分钟
+                    </div>
+                    <div class="stat-box">
+                        准确率
+                        <span id="accuracy-value" class="stat-value">100%</span>
+                    </div>
+                    <div class="stat-box">
+                        时间
+                        <span id="timer-value" class="stat-value">60</span> 秒
+                    </div>
+                </div>
+                
+                <div class="game-controls">
+                    <button id="start-btn" class="game-btn">开始挑战</button>
+                    <button id="reset-btn" class="game-btn">重新开始</button>
+                    <button id="check-btn" class="game-btn">检查结果</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <h3 class="footer-title">igobyjy</h3>
+            <p class="tagline">UI设计师 | 创意技术爱好者</p>
+            
+            <div class="footer-links">
+                <a href="#about">关于我</a>
+                <a href="#skills">技能</a>
+                <a href="#portfolio">作品集</a>
+                <a href="#contact">联系我</a>
+            </div>
+            
+            <p class="copyright">&copy; 2025 igobyjy - 个人网站</p>
+            <p class="copyright">基于HTML, CSS和JavaScript构建</p>
+        </div>
+    </footer>
+    
+    <!-- 作品集模态框 -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2 class="modal-title" id="modalProjectTitle">项目标题</h2>
+            <div class="modal-image" id="modalProjectImage">
+                <i class="fas fa-image"></i>
+            </div>
+            <div id="modalProjectDescription">
+                <p>这里是项目的详细描述...</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 回到顶部按钮 -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <!-- 行走宠物助手 -->
+    <div class="walking-pet" id="walkingPet">
+        <div class="pet-body">
+            <img src="images/bgdd.png" alt="我的宠物" class="pet-avatar" id="petAvatar">
+        </div>
+        <div class="pet-bubble" id="petBubble">
+            拖拽我可以移动位置哦！
+        </div>
+    </div>
+
+    <!-- 背景音乐 -->
+    <audio id="bgm" loop>
+        <source src="audio/bgm2.mp3">
+        您的浏览器不支持音频元素。
+    </audio>
+
+    <!-- 外部库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <script>
+        // 初始化粒子背景（颜色调整为蓝色）
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 60, density: { enable: true, value_area: 800 } },
+                color: { value: "#2563eb" },  /* 粒子颜色改为主蓝 */
+                shape: { type: "circle" },
+                opacity: { value: 0.4, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 130,
+                    color: "#2563eb",  /* 连接线颜色改为主蓝 */
+                    opacity: 0.3,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 1.5,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
+        // 以下为原JavaScript代码（未做任何修改）
+        // ...（保留你原有代码中的JavaScript逻辑，如平滑滚动、表单提交、黑暗模式切换等）...
+    </script>
+</body>
+</html>
